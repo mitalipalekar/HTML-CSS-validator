@@ -17,12 +17,12 @@
 		"default_popup": "popup.html",         
 		"default_title": "HTML and CSS Validator"
 	},
-	"content_scripts": [
-		{
-		"matches": ["https://*/*", "http://*/*"],
-		"js": ["contentScript.js"]
-		}
-	],
+//	"content_scripts": [
+//		{
+//		"matches": ["https://*/*", "http://*/*"],
+//		"js": ["contentScript.js"]
+//		}
+//	],*/
 	"permissions": [
 		"<all_urls>",
 		"tabs"
