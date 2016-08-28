@@ -24,6 +24,9 @@ function HTMLtoString(HTMLcode) {
 function escapeChars(codeEscaped) {
     codeEscaped = codeEscaped.replace(/</g, "&lt;");
     codeEscaped = codeEscaped.replace(/>/g, "&gt;");
+    codeEscaped = codeEscaped.replace(/&/g, "&amp;");
+    codeEscaped = codeEscaped.replace(/'/g, "&#039;");
+    codeEscaped = codeEscaped.replace(/"/g, "&quot;");
     return codeEscaped;
 }
 
