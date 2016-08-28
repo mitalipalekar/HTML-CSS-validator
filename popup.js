@@ -14,7 +14,6 @@
 	};
 
 	chrome.runtime.onMessage.addListener(function(message, sender, response) {
-		//console.log("12345" + message);
 		HTMLcodeContent.innerHTML = message;
 	});
 }) ();

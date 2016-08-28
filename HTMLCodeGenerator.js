@@ -1,5 +1,5 @@
 function HTMLtoString(HTMLcode) {
-    var html = HTMLcode.firstChild;
+    var html = "";
     var node = HTMLcode.firstChild;
         
     while (node) {
@@ -22,11 +22,9 @@ function HTMLtoString(HTMLcode) {
 }
 
 function escapeChars(codeEscaped) {
-    codeEscaped = codeEscaped.replace("<", "&lt;");
-    codeEscaped = codeEscaped.replace(">", "&gt;");
+    codeEscaped = codeEscaped.replace(/</g, "&lt;");
+    codeEscaped = codeEscaped.replace(/>/g, "&gt;");
     return codeEscaped;
-
 }
-
 
 chrome.runtime.sendMessage(HTMLtoString(document));
