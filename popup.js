@@ -15,7 +15,7 @@
 
 	chrome.runtime.onMessage.addListener(function(message, sender, response) {
 		HTMLcodeContent.innerHTML = message;
-		console.log(HTMLcodeContent.innerHTML);
+		//console.log(HTMLcodeContent.innerHTML);
 		determineValidHTML();
 	});
 
@@ -36,7 +36,7 @@ To be checked:
 */
 	function determineValidHTML() {
 		if(!doctypePresent()) {
-			HTMLcodeContent.innerHTML("DOCTYPE missing, not valid XHTML");
+			HTMLcodeContent.innerHTML = "DOCTYPE missing, not valid XHTML";
 		} else if(properlyNested()){
 			console.log("properly nested");
 		} else {
@@ -55,12 +55,13 @@ To be checked:
 	function properlyNested() {
 		var selfClosingTags = ["<area />", "<base />", "<br />", "<col />", "<command />", "<embed />", "<hr />", "<img />", "<input />", "<keygen />", "<link />", "<meta />", "<param />", "<source />", "<track />", "<wbr />"];
 		var stack = [];
-		/*for(var i = 0; i < 100HTMLcodeContent.innerHTML.length; i++) {
-			var currentTag = HTMLcodeContent.innerHTML.substring(HTMLcodeContent.innerHTML.substring(i).indexOf("&amp;lt;"), HTMLcodeContent.innerHTML.substring(i + 1).indexOf("&amp;gt;") + 1 + "&amp;gt;".length);
-			i = HTMLcodeContent.innerHTML.substring(i).indexOf("&amp;lt;") + currentTag.length;
+		for(var i = 0; i < HTMLcodeContent.innerHTML.length;) {
+			var currentTag = HTMLcodeContent.innerHTML.substring(HTMLcodeContent.innerHTML.substring(i).indexOf("&amp;lt;") + i, HTMLcodeContent.innerHTML.substring(i + 1).indexOf("&amp;gt;") + i + 1 + "&amp;gt;".length);
+			i += HTMLcodeContent.innerHTML.substring(i).indexOf("&amp;lt;") + currentTag.length;
+			//console.log(i);
 			stack.push(currentTag);
-			console.log(currentTag);
+			//console.log(currentTag);
 
-		}*/
+		}
 	}
 }) ();
