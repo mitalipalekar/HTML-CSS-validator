@@ -24,7 +24,7 @@
 	function HTMLCodeGenerator() {
 		var htmlCode = document.getElementById("htmlCodeInput");
 		document.getElementById("htmlCodeOutput").innerHTML = escapeChars(htmlCode.value);
-		//console.log(htmlCode.value);
+		console.log(document.getElementById("htmlCodeOutput").innerHTML);
 		determineValidHTML();
 	}
 
@@ -39,27 +39,25 @@
 
 /*
 To be checked:
-- properly nested
+- properly nested 										DONE
 - all tags are closed (self-closing ones as well)
 - must be in all lowercase
 - one root element
-- DOCTYPE must be present 	                          DONE
+- DOCTYPE must be present 	                            DONE
 - must have a head, html, title and body attribute
 - Attributes:
 	- must be lowercase
 	- enclosed in quotes
 	- minimalization is forbidden
 	- xmlns element must be present in head
-
 */
+
 	function determineValidHTML() {
 		var HTMLcodeContent = document.getElementById("htmlCodeOutput");
 		if(!doctypePresent(HTMLcodeContent)) {
 			HTMLcodeContent.innerHTML = "DOCTYPE missing, not valid XHTML";
-		} else if(properlyNested(HTMLcodeContent)){
-			HTMLcodeContent.innerHTML = "HTML Code Properly Nested";
 		} else {
-			HTMLcodeContent.innerHTML = "HTML Code NOT Properly Nested";
+			HTMLcodeContent.innerHTML = properlyNested(HTMLcodeContent);
 		}
 	}
 
@@ -76,26 +74,39 @@ To be checked:
 		var stack = [];
 		for(var i = 0; i < HTMLcodeContent.innerHTML.length;) {
 			var currentTag = HTMLcodeContent.innerHTML.substring(HTMLcodeContent.innerHTML.substring(i).indexOf("&amp;lt;") + i, HTMLcodeContent.innerHTML.substring(i + 1).indexOf("&amp;gt;") + i + 1 + "&amp;gt;".length);
+			if(!(currentTag.substring(9, currentTag.indexOf("&amp;gt;")).match(/^[a-z1-9]+$/)) && !(HTMLcodeContent.innerHTML.includes("&amp;lt;!DOCTYPE"))) {
+				return (unescapeTag(currentTag) + " is NOT in all lowercase.  All HTML tags must be in lowercase.");
+			}
 			i += HTMLcodeContent.innerHTML.substring(i).indexOf("&amp;lt;") + currentTag.length;
 			//console.log(currentTag);
-			if (currentTag.match(/&amp;lt;[a-z1-9]+&amp;gt;/)) { //opening tag
+			if (currentTag.match(/^&amp;lt;[a-z1-9]+&amp;gt;$/)) { //opening tag
 				stack.push(currentTag);
 				//console.log(currentTag);
-			} else if(currentTag.match(/&amp;lt;\/[a-z1-9]+&amp;gt;/)) { //closing tag
+			} else if(currentTag.match(/^&amp;lt;\/[a-z1-9]+&amp;gt;$/)) { //closing tag
 				var topElement = stack.pop();
 				//console.log(topElement);
 				if(topElement.substring(8, topElement.indexOf("&amp;gt;")) !== currentTag.substring(9, currentTag.indexOf("&amp;gt;"))) {
 					//console.log("opening tag" + topElement.substring(8, topElement.indexOf("&amp;gt;")));
 					//console.log("closing tag" + currentTag.substring(9, topElement.indexOf("&amp;gt;")));
 					//console.log("terminate" + currentTag);
-					return false;
+					console.log(topElement);
+					return "HTML Code NOT Properly Nested: " + unescapeTag(topElement);
 				}
 			}
 		}
 		//console.log(stack.length);
 		if (stack.length != 0) {
-			return false;
+			return "HTML Code NOT Properly Nested: " + unescapeTag(stack.pop());
 		}
-		return true;
+		return "HTML Code Properly Nested";
+	}
+
+	function unescapeTag(tag) {
+	    tag = tag.replace("&lt;", "<");
+	    tag = tag.replace("&gt;", "\>");
+	    tag = tag.replace("&amp;", "&");
+	    tag = tag.replace("&#039;", "\'");
+	    tag = tag.replace("&quot;", "\"");
+	    return tag;
 	}
 }) ();
